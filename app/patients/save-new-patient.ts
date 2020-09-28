@@ -56,7 +56,11 @@ export async function savePersonAddress(patient: PatientData,insertMap: Inserted
             changed_by: userMap[patient.address.changed_by],
             voided_by: userMap[patient.address.voided_by],
             person_id:insertMap.patient,
-            address1:patient.address.county_district
+            address1:patient.address.county_district, //County
+            address3:patient.address.address2, //Landmark
+            address8:patient.address.address6, //Location, 
+            address9:patient.address.address5 //Sub Location, 
+
         };
     }
     await CM.query(toPersonAddressInsertStatement(patient.address, replaceColumns), connection);
