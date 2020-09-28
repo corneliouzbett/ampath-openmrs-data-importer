@@ -292,3 +292,22 @@ export type EncounterProvider = {
     void_reason: string
     uuid: string
 }
+
+export type PatientProgram = {
+    patient_program_id: number;
+    patient_id: number;
+    program_id: number;
+    date_enrolled: Date;
+    date_completed: Date;
+    location_id: number;
+    outcome_concept_id: number;
+    creator: number;
+    date_created: Date;
+    changed_by: number;
+    date_changed: Date;
+    voided: number;
+    voided_by: number;
+    date_voided: Date;
+    void_reason: string;
+    uuid: string;
+}
