@@ -1,6 +1,6 @@
 import ConnectionManager from "../connection-manager";
 import { Connection } from "mysql";
-import { Person, Patient, Address, PersonName, PersonAttribute, PatientIdentifier, PatientProgram } from "../tables.types";
+import { Person, Patient, Address, PersonName, PersonAttribute, PatientIdentifier, PatientProgram, PersonAttributeType } from "../tables.types";
 import { PatientData } from "./patient-data";
 import loadPatientObs from "../encounters/load-patient-obs";
 import loadVisitData from "../visits/load-visits-data";
@@ -90,5 +90,11 @@ export async function fetchPersonIdentifiers(personId: number, connection: Conne
 export async function fetchPatientPrograms(personId: number, connection: Connection) {
     const sql = `select * from patient_program where patient_id= ${personId}`;
     let results: PatientProgram[] = await CM.query(sql, connection);
+    return results;
+}
+
+export async function fetchPersonAttributeTypes(connection: Connection) {
+    const sql = `select * from person_attribute_type`;
+    let results: PersonAttributeType[] = await CM.query(sql, connection);
     return results;
 }

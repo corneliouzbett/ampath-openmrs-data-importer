@@ -311,3 +311,22 @@ export type PatientProgram = {
     void_reason: string;
     uuid: string;
 }
+export type PersonAttributeType = {
+    person_attribute_type_id:number;
+    name:string;
+    description:string;
+    format:string;
+    foreign_key:number;
+    searchable:number;
+    creator:number;
+    date_created:Date;
+    changed_by:number;
+    date_changed:Date;
+    retired:number;
+    retired_by:number;
+    date_retired:Date;
+    retire_reason:string;
+    edit_privilege:string;
+    uuid:string;
+    sort_weight:number;
+}

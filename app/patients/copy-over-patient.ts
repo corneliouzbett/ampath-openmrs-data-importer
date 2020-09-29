@@ -9,6 +9,7 @@ import saveEncounterData from '../encounters/save-encounters';
 import savePatientOrders from '../encounters/save-orders';
 import { saveProgramEnrolments } from './save-program-enrolment';
 import { savePatientIdentifiers } from './save-identifiers';
+import { savePersonAttributes } from './save-person-attribute';
 const CM = ConnectionManager.getInstance();
 
 export default async function transferPatientToAmrs(personId: number) {
@@ -35,6 +36,7 @@ export default async function transferPatientToAmrs(personId: number) {
         await savePersonAddress(patient, insertMap, amrsCon)
         await savePersonName(patient, insertMap, amrsCon)
         await savePatientIdentifiers(patient.identifiers, patient, insertMap, amrsCon);
+        await savePersonAttributes(patient, insertMap, amrsCon)
         await saveProgramEnrolments(patient.patientPrograms, patient, insertMap, amrsCon);
         await saveVisitData(patient, insertMap, kenyaEmrCon, amrsCon);
         await saveEncounterData(patient.encounter,insertMap,amrsCon,kenyaEmrCon);
