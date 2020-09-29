@@ -1,6 +1,6 @@
 import ConnectionManager from "../connection-manager";
 import { Connection } from "mysql";
-import { Person, Patient, Address, PersonName, PersonAttribute, PatientIdentifier } from "../tables.types";
+import { Person, Patient, Address, PersonName, PersonAttribute, PatientIdentifier, PatientProgram } from "../tables.types";
 import { PatientData } from "./patient-data";
 import loadPatientObs from "../encounters/load-patient-obs";
 import loadVisitData from "../visits/load-visits-data";
@@ -26,6 +26,7 @@ export default async function loadPatientData(patientId: number, connection:Conn
     let orders = await loadPatientOrders(patientId, connection); 
     let provider = await fetchProvider(patientId, connection);
     let encounters= await loadencounters(patientId, connection);
+    let patientPrograms = await fetchPatientPrograms(patientId, connection);
     let results: PatientData = {
         person: person,
         patient: patient,
@@ -33,6 +34,7 @@ export default async function loadPatientData(patientId: number, connection:Conn
         names: names,
         attributes: attributes,
         identifiers:identifiers,
+        patientPrograms: patientPrograms,
         obs: obs,
         orders: orders,
         visits:visits,
@@ -82,5 +84,11 @@ export async function fetchPersonAttributes(personId: number, connection: Connec
 export async function fetchPersonIdentifiers(personId: number, connection: Connection) {
     const sql = `select * from patient_identifier where patient_id= ${personId}`;
     let results: PatientIdentifier[] = await CM.query(sql, connection);
+    return results;
+}
+
+export async function fetchPatientPrograms(personId: number, connection: Connection) {
+    const sql = `select * from patient_program where patient_id= ${personId}`;
+    let results: PatientProgram[] = await CM.query(sql, connection);
     return results;
 }
