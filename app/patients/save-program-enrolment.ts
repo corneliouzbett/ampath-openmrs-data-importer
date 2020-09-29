@@ -16,11 +16,11 @@ export async function saveProgramEnrolments(enrollmentsToInsert: PatientProgram[
 }
 
 export async function saveHivEnrolments(enrollmentsToInsert: PatientProgram[], insertMap:InsertedMap, connection:Connection) {
-    await enrollmentsToInsert.forEach(async (p, i, A)=> {
+    for(const p of enrollmentsToInsert) {
         if(p.program_id === KenyaEMR_HIV_Program) {
             await saveProgramEnrolment(p, AMR_HIV_Program, insertMap, connection);
         }
-    });
+    }
 }
 
 export async function saveProgramEnrolment(enrolment: PatientProgram, programId: number, insertMap:InsertedMap, connection: Connection) {

@@ -12,6 +12,9 @@ export type InsertedMap = {
     patientPrograms: {
         [kenyaEmrId:number]:number;
     }
+    patientIdentifier: {
+        [kenyaEmrId:number]:number;
+    }
     obs: ObsMap,
     orders: OrderMap
 };
