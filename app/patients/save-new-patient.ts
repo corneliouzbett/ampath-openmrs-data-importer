@@ -44,14 +44,13 @@ export async function savePatient(
   personId: number,
   connection: Connection
 ) {
-  // console.log("user person id", personId);
   const userMap = UserMapper.instance.userMap;
   let replaceColumns = {};
   if (userMap) {
     replaceColumns = {
-      creator: userMap[patient.person.creator],
-      changed_by: userMap[patient.person.changed_by],
-      voided_by: userMap[patient.person.voided_by],
+      creator: userMap[patient.patient.creator],
+      changed_by: userMap[patient.patient.changed_by],
+      voided_by: userMap[patient.patient.voided_by],
       patient_id: personId,
     };
   }
@@ -74,7 +73,7 @@ export async function savePersonAddress(
 ) {
   let replaceColumns = {};
   const userMap = UserMapper.instance.userMap;
-  if (userMap) {
+  if (userMap && patient.address) {
     replaceColumns = {
       creator: userMap[patient.address.creator],
       changed_by: userMap[patient.address.changed_by],
@@ -85,11 +84,12 @@ export async function savePersonAddress(
       address8: patient.address.address6, //Location,
       address9: patient.address.address5, //Sub Location,
     };
+
+    await CM.query(
+      toPersonAddressInsertStatement(patient.address, replaceColumns),
+      connection
+    );
   }
-  await CM.query(
-    toPersonAddressInsertStatement(patient.address, replaceColumns),
-    connection
-  );
 }
 
 export function toPersonAddressInsertStatement(
