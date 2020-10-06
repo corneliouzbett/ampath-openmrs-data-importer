@@ -6,9 +6,11 @@ import ConnectionManager from "../connection-manager";
 import patientSearch from "./patient-search";
 import { fetchKenyaEMRPatientIds, loadData } from "./load-patient-data";
 import fetchAmrsPatientEncounterLocations from "./patient-encounter-location";
-import exportRecurrentPatients from "./export-recurrent-patients";
+import {
+  exportRecurrentPatients,
+  exportNewPatientList,
+} from "./export-recurrent-patients";
 import { PatientComparator } from "../types/patient.types";
-
 
 const NANOSECS_PER_SEC = 1e9;
 const connection = ConnectionManager.getInstance();
@@ -17,9 +19,14 @@ init();
 
 async function init() {
   const startTime = startTimer();
-  const data = await checkForPossiblePatientMatch(5);
-  console.log("Number of possible already existing patients: ", data.length);
-  await exportRecurrentPatients(data);
+  const data = await checkForPossiblePatientMatch(2);
+  console.log(
+    "Number of possible already existing patients: ",
+    data[0]?.length
+  );
+  console.log("Number of new patients: ", data[1]?.length);
+  await exportRecurrentPatients(data[0]);
+  await exportNewPatientList(data[1]);
   const elapsedTime = startTimer(startTime);
   console.log(
     chalk.bold.gray(`\nCompleted all operations in ${formatTime(elapsedTime)}s`)
@@ -29,13 +36,14 @@ async function init() {
 
 async function checkForPossiblePatientMatch(
   limit: number
-): Promise<Array<PatientComparator>> {
+): Promise<Array<Array<any>>> {
   const patients = await fetchKenyaEMRPatientIds(limit);
   const patientIds = patients.map((patient) => patient.patient_id);
 
   console.log("Number of patient IDs Loaded: ", patientIds.length);
   console.log("");
 
+  let newPatientList: Array<number> = [];
   let patientList: Array<PatientComparator> = [];
   for (const [index, id] of patientIds.entries()) {
     const startTime = startTimer();
@@ -60,10 +68,13 @@ async function checkForPossiblePatientMatch(
     );
     if (list.length) {
       console.log(chalk.bold.red(`${JSON.stringify(list, undefined, 2)}\n`));
+    } else {
+      let patientId: any = { patient_id: id };
+      newPatientList.push(patientId);
     }
     patientList.push(...list);
   }
-  return patientList;
+  return [patientList, newPatientList];
 }
 
 async function checkForAlreadyExistingPatientInAmrs(patientId: number) {

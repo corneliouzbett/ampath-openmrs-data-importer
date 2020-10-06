@@ -106,3 +106,4 @@ build/
 config.json
 metadata/patient_ids.csv
 metadata/possible-existing-patients.csv
+metadata/new_patients_ids.csv
