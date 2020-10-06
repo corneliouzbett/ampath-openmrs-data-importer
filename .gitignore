@@ -105,3 +105,4 @@ build/
 .tern-port
 config.json
 metadata/patient_ids.csv
+metadata/possible-existing-patients.csv
